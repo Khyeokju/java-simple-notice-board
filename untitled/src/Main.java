@@ -2,17 +2,23 @@ import java.util.*;
 
 public class Main {
     private final ArrayList<Article> articles = new ArrayList<>();
-    private int articleCount = 0;
+    private int articleCount = 0; // 멤버 변수로 생성
     private String UserName;
 
     public static void main(String[] args) {
-        Main main = new Main();
+        Main main = new Main(); 
         main.run();
+    //객체를 따로 생성하고 run()에서 실행하는 이유
+    //객체지향적인 코드 유지 (static 사용 최소화)
+    //main()을 가볍게 유지하여 프로그램 실행 흐름을 명확하게 분리
+    //확장성 증가 (여러 개의 Main 객체를 독립적으로 실행 가능)
+    //디버깅 및 유지보수 용이 (로직이 run()에 집중됨)
+    // 객체지향 원칙을 따르고, 유지보수와 확장성이 좋은 구조를 만들기 위해 이런 방식이 권장됨
     }
 
     public void run() {
         App app = new App();
-        String username = app.start();
+        String username = app.start(); // app 메서드를 실행하여 로그인한 username 저장
 
         if (username == null) {
             System.out.println("로그인 실패 프로그램 종료");
@@ -24,7 +30,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         while (true) {
-            System.out.print("write / list / detail / delete / modify / exit : ");
+            System.out.print("write / list [string] / detail [num] / delete [num] / modify [num] / exit : ");
             String commend = sc.nextLine();
 
             if (commend.equals("exit")) {
@@ -47,7 +53,7 @@ public class Main {
         System.out.println("======게시판 종료======");
         }
 
-        private void write (Scanner sc) {
+        private void write (Scanner sc) { 
             int id = articleCount + 1;
             articleCount = id;
 
@@ -56,9 +62,9 @@ public class Main {
             System.out.print("내용 : ");
             String body = sc.nextLine();
             int hit = 0;
-            String nowDate = Util.getNowDateStr();
-            Article article = new Article(id, title, body, hit, nowDate, UserName);
-            articles.add(article);
+            String nowDate = Util.getNowDateStr(); // Util 클래스로 작성 시간 저장
+            Article article = new Article(id, title, body, hit, nowDate, UserName); // 게시글 생성
+            articles.add(article); // 게시글 저장
 
             System.out.println(id + "번째 글이 생성되었습니다.");
         }
@@ -68,9 +74,9 @@ public class Main {
                 System.out.println("게시물이 없습니다.");
                 return;
             }
-            String Keyword = commend.substring(4).trim();
+            String Keyword = commend.substring(4).trim(); // ex) list 2 에서 list와 공백을 제거하여 2만 남김
             System.out.println("검색어: " + Keyword);
-            ArrayList<Article> searchArticle = articles;
+            ArrayList<Article> searchArticle = articles; // 찾으려는 게시글을 저장할 배열 생성
 
             if (!Keyword.isEmpty()) {
                 searchArticle = new ArrayList<>();
@@ -94,13 +100,14 @@ public class Main {
 
         private void detail (String commend) {
             String[] detailNum = commend.split(" ");
-            int id = Integer.parseInt(detailNum[1]);
+            int id = Integer.parseInt(detailNum[1]); // 조회하고자 하는 게시글 번호 저장
 
-            Article foundArticle = null;
+            Article foundArticle = null; // 찾으려는 게시글을 저장할 객체
+            // foundArticle를 통해 객체 참조
 
             for (int i = 0; i < articles.size(); i++) {
                 Article article = articles.get(i);
-                if (article.id == id) {
+                if (article.id == id) { // 번호와 일치하면 저장
                     foundArticle = article;
                     break;
                 }
@@ -167,11 +174,3 @@ public class Main {
             System.out.println(foundArticle.id + "번 게시물 수정 완료");
         }
 }
-
-//객체를 따로 생성하고 run()에서 실행하는 이유
-//객체지향적인 코드 유지 (static 사용 최소화)
-//main()을 가볍게 유지하여 프로그램 실행 흐름을 명확하게 분리
-//확장성 증가 (여러 개의 Main 객체를 독립적으로 실행 가능)
-//디버깅 및 유지보수 용이 (로직이 run()에 집중됨)
-
-// 객체지향 원칙을 따르고, 유지보수와 확장성이 좋은 구조를 만들기 위해 이런 방식이 권장됨
